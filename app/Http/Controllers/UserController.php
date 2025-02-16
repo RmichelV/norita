@@ -1,43 +1,50 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\View\View;
 
-//propios
+// propias librerias
+use App\Models\User;
 use App\Models\City;
 use App\Models\Role;
-use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules;
 
-class RegisteredUserController extends Controller
+
+class UserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Display a listing of the resource.
      */
-    public function create(): View
+    public function index()
     {
+        $users = User::all();
+        $cities = City::all();
+        $roles = Role::all();
 
+        return view ('Users.index',compact('users','cities','roles'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
         $cities = City::all();
         $roles = Role::all();
     
 
         return view('auth.register',compact('cities','roles'));
+
     }
 
     /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $validator=Validator::make($request->all(),[
             'name' => [
@@ -86,8 +93,6 @@ class RegisteredUserController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        dd($validator);
-
         $user = User::create([
             'name' => $request->name,
             'last_name'=>$request->last_name,
@@ -102,6 +107,38 @@ class RegisteredUserController extends Controller
         $user->save();
         // event(new Registered($user));
 
-        return redirect(route('Users.index'));
+        return redirect(route('users.index'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }
