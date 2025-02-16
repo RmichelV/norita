@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Hash;
 
 return new class extends Migration
 {
@@ -14,12 +15,31 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('last_name');
+            $table->bigInteger('cellphone');
+            $table->string('identity_number');
+            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
+            $table->string('gender');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
+
+        DB::table('users')->insert([
+            ['name' => 'Super',
+            'last_name' => 'Administrador',
+            'cellphone' => 1234567890,
+            'identity_number' => '1234567890',
+            'city_id' => 1,
+            'gender'=> 'Masculino',
+            'email' => 'administrador@gmail.com',
+            'password' => hash::make('12345678'),
+            'role_id' => 1
+            ]
+        ]);
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
