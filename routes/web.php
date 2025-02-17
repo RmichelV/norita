@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,5 +25,7 @@ Route::middleware('auth')->group(function () {
 
 //propias rutas
 Route::resource('users',UserController::class);
+Route::resource('categories',CategoryController::class);
 
 require __DIR__.'/auth.php';
+
